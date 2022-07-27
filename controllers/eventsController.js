@@ -28,11 +28,13 @@ module.exports = {
     index: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events;', function(err, result) {
+            request.query('SELECT *, format(startTime, \'hh\\:mm\') AS startTimef, format(endTime, \'hh\\:mm\') AS endTimef FROM events;', function(err, result) {
                 // REMOVE LATER
-                //console.log('In eventsControllerIndex', result.recordset);
+                console.log('In eventsControllerIndex', result.recordset);
                 //console.log(typeof result);
-                res.render('events/index', {title: 'Events', model: result});
+                //var models = JSON.stringify(result.recordsets);
+                model = result.recordset
+                res.render('events/index', {title: 'Events', model});
             });
         });
     },
@@ -51,6 +53,7 @@ module.exports = {
     },
 
     // GET Details of a single event
+    // TODO: this isn't working at all
     details: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
@@ -60,7 +63,7 @@ module.exports = {
                     recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
                 }
 
-                res.render('events/details', {title: 'Events', model: recordset[0]});
+                res.render('events/details', {title: 'Event Details', model: recordset[0]});
             }
             else {
                 res.json(recordset[0]);

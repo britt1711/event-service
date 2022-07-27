@@ -4,6 +4,7 @@
 
 const express = require('express');
 const app = express();
+const path = require('Path');
 const sql = require('mssql');
 const config = require('./config/config.js');
 
@@ -13,13 +14,16 @@ const events = require('./routes/events');
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
+// loads all html, css, and js files from the public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // pages from home controller
 app.get('/', home.index);
 
 // pages relating to events controller
 app.get('/events', events.index);
 app.get('/events/:userId', events.userEvents);
-//app.get('/events/:userId/:id', events.details);
+app.get('/events/:userId/:id', events.details);
 //app.post('/events/:userId/:id', events.update)
 
 // check sql connection

@@ -13,7 +13,7 @@ CREATE TABLE events (
     venueName nvarchar(50) NULL,
     street nvarchar(50) NOT NULL,
     city nvarchar(50) NOT NULL,
-    [state] char(2) NOT NULL,
+    [state] nchar(2) NOT NULL,
     zipcode char(5) NOT NULL,
     country nvarchar(50) NOT NULL,
     FOREIGN KEY (userId) REFERENCES users(id),
@@ -23,8 +23,8 @@ CREATE TABLE events (
 -- pre-inserted data to use for testing later
 INSERT INTO events (userId, title, [description], startDate, startTime, endDate, endTime, eventTypeId, venueName, street, city, [state], zipcode, country)
 VALUES
-    (1, N'BirthdayBash', N'Celebrate my 21st with me!', '2022-01-01', '18:00', '2022-01-02', '4:00', 8, N'Somewhere Nowhere', N'112 W 25th St', N'New York', 'NY', '10001', N'United States'),
-    (1, N'Galentines', N'Picnic in the park!', '2022-02-13', '16:00', '2022-02-13', '20:00', 8, N'Washington Square Park', N'Washington Square', N'New York', 'NY', '10012', N'United States')
+    (1, N'BirthdayBash', N'Celebrate my 21st with me!', '2022-01-01', format('18:00', 'hh\:mm'), '2022-01-02', format('04:00', 'hh\:mm'), 8, N'Somewhere Nowhere', N'112 W 25th St', N'New York', N'NY', '10001', N'United States'),
+    (1, N'Galentines', N'Picnic in the park!', '2022-02-13', format('16:00', 'hh\:mm'), '2022-02-13', format('20:00', 'hh\:mm'), 8, N'Washington Square Park', N'Washington Square', N'New York', N'NY', '10012', N'United States')
 
 /*
 NOTE: NVARCHAR allows for internationalization because it supports unicode data

@@ -1,0 +1,35 @@
+<!--
+    file shows details of a particular event to the user
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs'); %>
+</head>
+
+<header>
+    <%- include('../partials/header.ejs'); %>
+</header>
+
+<main class="container mt-5">
+    <block class="title-block">
+        <!-- title section -->
+        <h1><%= title %></h1>
+        <p>
+            View all details for this event below.
+        </p>
+    </block>
+
+    <!-- body section -->
+    <body>
+        <%= model %> 
+
+</main>
+
+<footer>
+    <%- include('../partials/footer.ejs'); %>
+</footer>
+
+</html>
