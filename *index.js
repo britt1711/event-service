@@ -40,5 +40,5 @@ app.use('/', require('./routes/login'));
 // bodyparsing - gives ability to process posted data and store it in the req.body
 app.use(express.urlencoded({extended: false}));
 
-const PORT = process.env.PORT || 4111;
+const PORT = 4111;
 app.listen(PORT, console.log("Server has started at port " + PORT))
