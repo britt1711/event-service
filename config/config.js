@@ -1,3 +1,8 @@
+/**
+ * file contains configuration needed for database
+ * pulls information from .env, where sql connection info is held
+ */
+
 "use strict";
 
 const assert = require( "assert" );

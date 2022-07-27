@@ -2,31 +2,34 @@
     file contains welcome message when website is called upon
 -->
 
+<!-- TODO: button doesn't lead to the right place; error in controller?-->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head.ejs'); %>
 </head>
-<body class="container">
 
 <header>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/header.ejs'); %>
 </header>
 
-<main>
+<main class = "container mt-5">
     <div class="jumbotron">
         <h1>Welcome Back to Eventeny!</h1>
         <h6>Easily manage everything that goes into your in-person, hybrid, and online events all in one convenient place!
         </h6>
 
         <p class="mt-5">Click below to view your events.</p>
-        <a asp-controller="events" asp-action="index" class="btn btn-primary mb-3">View Events</a>
+        <form action="/events">
+            <input type="submit" value="View Events" class="btn btn-primary mb-3" />
+        </form>
     </div>
 </main>
 
 <footer>
-    <%- include('../partials/footer'); %>
+    <%- include('../partials/footer.ejs'); %>
 </footer>
 
-</body>
 </html>
