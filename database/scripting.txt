@@ -1,0 +1,10 @@
+# TODO: write scripting later
+
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS event_types;
+DROP TABLE IF EXISTS users;
+
+Create event_types TABLE
+Create users TABLE
+Create events TABLE
+
