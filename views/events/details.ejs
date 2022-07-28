@@ -21,6 +21,7 @@
             View all details for this event below.
         </p>
     </block>
+    <hr>
 
     <!-- body section -->
     <body>
@@ -38,11 +39,25 @@
                     <li>End Date and Time: <%= e.endDatetime.toString() %></li>  
                 </ul>
             </div>
+
+            <!--NEED TO WRAP BELOW CODE IN SECTION TO ENSURE user made event-->
+            <!--right now this is hardcoded because user login feature is not coded
+                this would only show the below after checking if userLoggedIn.id == event.userId-->
+            <% if(loggedInUserId === e.userId) { %>
             <!--button to edit event-->
             <form action="/events/edit" method="get" >
                 <input type="hidden" id="id" name="id" value=<%= e.id %> >
                 <input type="submit" value="Edit Event" class="btn btn-secondary mb-3"/>
             </form>
+            <hr>
+
+            <!--button to delete event-->
+            <form action="/events/delete" method="get" >
+                <input type="hidden" id="id" name="id" value=<%= e.id %> >
+                <input type="submit" value="Delete Event" class="btn btn-secondary mb-3"/>
+            </form>
+            <% } %>
+            
             <hr>
         <% }; %>
     </body>

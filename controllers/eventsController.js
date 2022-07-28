@@ -7,6 +7,7 @@ const sql = require('mssql');
 const markdown = require('markdown').markdown;
 const config = require('../config/config.js');
 const { loggedInUser } = require("./AccountController.js");
+const bodyParser = require('body-parser');
 //const ejsLint = require('ejs-lint');
 
 // information to connect to the database
@@ -64,7 +65,7 @@ module.exports = {
                 model = result.recordset;
                 console.log('IN DETAILS');
                 console.log(model);
-                res.render('events/details', {title: 'Event Details', model});
+                res.render('events/details', {title: 'Event Details', model, loggedInUserId: loggedInUser.id});
             /*
             if(req.accepts('html')) {
                 for(var i = 0; i < recordset.length; i++){
@@ -139,6 +140,70 @@ module.exports = {
                     res.render('events/error', {err});
                 } else  {
                     res.render('events/sucess', {action: 'Event Updated!'})
+                }              
+            });
+        });
+    },
+
+    // CREATE an event
+    //NOT WORKING and i'm not sure why
+    create: function(req, res) {
+        const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
+            const request = new sql.Request(dbConn);
+            console.log("IN CREATE POST");
+            console.log(req.body.title);
+            colnames = '(userId, title, [description], startDatetime, endDatetime, eventTypeId, venueName, street, city, [state], zipcode, country)'
+
+            console.log('INSERT INTO events '+colnames+' VALUES \
+            '+loggedInUser.id+', \
+            N\''+req.body.title+'\', \
+            N\''+req.body.description+'\', \
+            '+req.body.startDatetime+'\', \
+            '+req.body.endDatetime+'\', \
+            '+req.body.eventTypeId+'\', \
+            N\''+req.body.venueName+'\', \
+            N\''+req.body.street+'\', \
+            N\''+req.body.city+'\', \
+            N\''+req.body.state+'\', \
+            \''+req.body.zipcode+'\', \
+            N\''+req.body.country+'\')');
+
+            request.query('INSERT INTO dbo.events '+colnames+' VALUES \
+                '+loggedInUser.id+', \
+                '+req.body.title+', \
+                '+req.body.description+', \
+                '+req.body.startDatetime+', \
+                '+req.body.endDatetime+', \
+                '+req.body.eventTypeId+', \
+                '+req.body.venueName+', \
+                '+req.body.street+', \
+                '+req.body.city+', \
+                '+req.body.state+', \
+                '+req.body.zipcode+', \
+                '+req.body.country+')', function(err) {
+                if (err) {
+                    console.log(err)
+                    res.render('events/error', {err});
+                } else  {
+                    res.render('events/sucess', {action: 'Event Created!'});
+                }              
+            });
+        });
+    },
+
+    // DELETE an event
+    delete: function(req, res) {
+        const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
+            const request = new sql.Request(dbConn);
+            console.log("IN DELETE POST");
+            console.log(req.query.id);
+            
+            request.query('DELETE FROM events WHERE id ='+req.query.id+';', function(err) {
+                if (err) {
+                    console.log(err)
+                    res.render('events/error', {err});
+                } else  {
+                    res.render('events/success', {action: 'Event Deleted!'});
                 }              
             });
         });

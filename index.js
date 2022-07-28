@@ -7,6 +7,7 @@ const app = express();
 const path = require('Path');
 const sql = require('mssql');
 const config = require('./config/config.js');
+const bodyParser = require('body-parser');
 
 const home = require('./routes/home');
 const events = require('./routes/events');
@@ -26,6 +27,15 @@ app.get('/events/userEvents', events.userEvents);
 app.get('/events/details/:id?', events.details);
 app.get('events/edit', events.edit);
 app.post('/events/:userId/:id', events.update);
+app.get('/events/create', (req, res) => {
+    res.render('events/create', {title: 'Create an Event'})
+});
+
+app.get('/events/delete/:id?', events.delete);
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.post('/events/create', urlencodedParser, events.create);
 
 // check sql connection
 const dbConfig = {
