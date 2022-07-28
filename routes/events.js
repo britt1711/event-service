@@ -18,36 +18,12 @@ module.exports.userEvents = function(req, res) {
 module.exports.details = function(req, res) {
     eventsController.details(req, res);
 }
+// GET form to edit a specific event
+module.exports.edit = function(req, res) {
+    eventsController.edit(req, res);
+}
 
 // UPDATE specific event
 module.exports.update = function(req, res) {
     eventsController.update(req, res);
 }
-
-
-
-
-/*
-module.exports = function(app) {
-    // GET all events
-    app.get('/events', function(req, res) {
-        eventController.index(req, res);
-    });
-
-    // GET all events for a certain user
-    app.get('/events/:userId', function(req, res) {
-        eventController.userEvents(req, res);
-    });
-    
-    // GET details for a specific event
-    app.get('/events/:id', function(req, res) {
-        eventController.details(req, res);
-    });
-
-    // UPDATE specific event
-    app.post('/events/:id', function(req, res) {
-        eventController.update(req, res);
-    });
-
-}
-*/

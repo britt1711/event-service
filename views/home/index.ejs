@@ -22,13 +22,15 @@
         </h6>
 
         <p class="mt-5">Click below to view our events.</p>
-        <form action="/events">
+        <form method="get" action="/events">
             <input type="submit" value="Events" class="btn btn-primary mb-3" />
         </form>
 
         <!-- TODO: define userId -->
         <p class="mt-3">Click below to manage your events.</p>
-        <form action="/events/:userId">
+        <form method="get" action="/events/userEvents/">
+            <!--right now, user ID is hardcoded-->
+            <!--<input type="hidden" id="userId" value = 1 >-->
             <input type="submit" value="View Your Events" class="btn btn-primary mb-3" />
         </form>
     </div>

@@ -6,6 +6,7 @@ const app = require("express");
 const sql = require('mssql');
 const markdown = require('markdown').markdown;
 const config = require('../config/config.js');
+const { loggedInUser } = require("./AccountController.js");
 //const ejsLint = require('ejs-lint');
 
 // information to connect to the database
@@ -28,12 +29,10 @@ module.exports = {
     index: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT *, format(startTime, \'hh\\:mm\') AS startTimef, format(endTime, \'hh\\:mm\') AS endTimef FROM events;', function(err, result) {
-                // REMOVE LATER
-                console.log('In eventsControllerIndex', result.recordset);
-                //console.log(typeof result);
-                //var models = JSON.stringify(result.recordsets);
+            request.query('SELECT * FROM events;', function(err, result) {
                 model = result.recordset
+                console.log('IN INDEX');
+                console.log(model);
                 res.render('events/index', {title: 'Events', model});
             });
         });
@@ -43,21 +42,30 @@ module.exports = {
     userEvents: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events WHERE userId='+req.params.userId+';', function(err, result) {
-                // REMOVE LATER
-                console.log('In eventsControllerUserEvents', result.recordset);
-                console.log(typeof result);
-                res.render('events/userEvents', {title: 'My Events', model: result});
+            // this wouldn't be hardcoded in reality
+            // would check the userid of the userloggedin
+            // is there an identity lib like in asp.net?
+            userId = loggedInUser.id;
+            console.log('IN USEREVENTS');
+            request.query('SELECT * FROM events WHERE userId='+userId+';', function(err, result) {
+                model = result.recordset
+                console.log(model);
+                res.render('events/userEvents', {title: 'My Events', model});
             });
         });
     },
 
     // GET Details of a single event
-    // TODO: this isn't working at all
     details: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            
+            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
+                console.log(result);
+                model = result.recordset;
+                console.log('IN DETAILS');
+                console.log(model);
+                res.render('events/details', {title: 'Event Details', model});
+            /*
             if(req.accepts('html')) {
                 for(var i = 0; i < recordset.length; i++){
                     recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
@@ -68,6 +76,33 @@ module.exports = {
             else {
                 res.json(recordset[0]);
             }
+            */
+            });
+        });
+    },
+
+    // GET form to edit a single event
+    // TODO: change this to produce a form
+    edit: function(req, res) {
+        const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
+            const request = new sql.Request(dbConn);
+            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
+                model = result.recordsets;
+                console.log(model);
+                res.render('events/edit', {title: 'Edit Event', model});
+            /*
+            if(req.accepts('html')) {
+                for(var i = 0; i < recordset.length; i++){
+                    recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
+                }
+
+                res.render('events/details', {title: 'Event Details', model: recordset[0]});
+            }
+            else {
+                res.json(recordset[0]);
+            }
+            */
+            });
         });
     },
 
@@ -78,10 +113,8 @@ module.exports = {
             
             request.input('title', req.body.title);
             request.input('description', req.body.description);
-            request.input('startDate', req.params.startDate);
-            request.input('startTime', req.body.startTime);
-            request.input('endDate', req.body.endDate);
-            request.input('endTime', req.params.endTime);
+            request.input('startDatetime', req.params.startDatetime);
+            request.input('endDatetime', req.body.endDatetime);
             request.input('eventTypeId', req.body.eventTypeId);
             request.input('venueName', req.body.venueName);
             request.input('street', req.params.street);
@@ -92,10 +125,8 @@ module.exports = {
 
             request.query('UPDATE Recipes SET title = @title, \
                 description = @description, \
-                startDate = @startDate, \
-                startTime = @startTime, \
-                endDate = @endDate, \
-                endTime = @endTime, \
+                startDatetime = @startDate, \
+                endDatetime = @endDate, \
                 eventTypeId = @eventTypeId, \
                 venueName = @venueName, \
                 street = @street, \
@@ -104,13 +135,11 @@ module.exports = {
                 zipcode = @zipcode, \
                 country = @country, \
                 WHERE id = @id;', function(err) {
-                request.query('SELECT * FROM Recipes WHERE id='+req.params.id+';', function(err, recordset) {
-                    for(var i = 0; i < recordset.length; i++){
-                        recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
-                    }
-
-                    res.render('events/details', {title: 'Events', model: recordset[0]});
-                });
+                if (err) {
+                    res.render('events/error', {err});
+                } else  {
+                    res.render('events/sucess', {action: 'Event Updated!'})
+                }              
             });
         });
     }

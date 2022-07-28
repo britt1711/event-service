@@ -22,9 +22,10 @@ app.get('/', home.index);
 
 // pages relating to events controller
 app.get('/events', events.index);
-app.get('/events/:userId', events.userEvents);
-app.get('/events/:userId/:id', events.details);
-//app.post('/events/:userId/:id', events.update)
+app.get('/events/userEvents', events.userEvents);
+app.get('/events/details/:id?', events.details);
+app.get('events/edit', events.edit);
+app.post('/events/:userId/:id', events.update);
 
 // check sql connection
 const dbConfig = {

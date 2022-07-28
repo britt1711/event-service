@@ -1,5 +1,9 @@
+/*
+this controller deals with the methods around index page
+*/
+
 // GET request for Home page
-// renders home.ejs
+// renders home/index.ejs
 
 // use res.render to load up an ejs view file
 // important to note that res.render() will look in a views folder for view
@@ -8,13 +12,3 @@
 module.exports.index = function(req, res) {
         res.render('home/index', {title: 'Home'});
     }
-
-    /*
-    about: function(req, res) {
-        res.render('home/about', {title: 'About'});
-    }
-
-    contact: function(req, res) {
-        res.render('home/contact', {title: 'Contact'});
-    }
-    */
