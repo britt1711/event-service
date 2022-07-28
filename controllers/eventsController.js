@@ -201,9 +201,9 @@ module.exports = {
             request.query('DELETE FROM events WHERE id ='+req.query.id+';', function(err) {
                 if (err) {
                     console.log(err)
-                    res.render('events/error', {err});
+                    res.render('events/error', {title:"Error!", err});
                 } else  {
-                    res.render('events/success', {action: 'Event Deleted!'});
+                    res.render('events/success', {title:"Success!", action: 'Event Deleted!'});
                 }              
             });
         });
