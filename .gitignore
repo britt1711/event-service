@@ -1,1 +1,3 @@
+// would typically ignore the .env file but I need it to run everything locally
+// right now, doesn't really contain sensitive info bc it's all fake
 .env
