@@ -25,6 +25,7 @@
                 <li>Address: <%= e.street%>, <%= e.city%>, <%= e.state %> <%= e.zipcode %> <%= e.country%></li>
                 <li>Start Date and Time: <%= e.startDatetime.toString() %></li>
                 <li>End Date and Time: <%= e.endDatetime.toString() %></li>  
+                <li>Created by: <%= e.firstName[0] %> <%= e.lastName[0] %></li>
             </ul>
         </div>
 
@@ -37,7 +38,7 @@
             <input type="hidden" id="id" name="id" value=<%= e.id %> >
             <input type="submit" value="Edit Event" class="btn btn-secondary mb-3"/>
         </form>
-        <hr>
+    </br>
 
         <!--button to delete event-->
         <form action="/events/delete" method="get" >

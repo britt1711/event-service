@@ -4,11 +4,8 @@
 
 // import necessary external modulules
 const sql = require('mssql');
-const markdown = require('markdown').markdown;
 const config = require('../config/config.js');
 const { loggedInUser } = require("./AccountController.js");
-const bodyParser = require('body-parser');
-//const ejsLint = require('ejs-lint');
 
 // information to connect to the database
 const dbConfig = {
@@ -72,10 +69,6 @@ module.exports = {
     userEvents: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            const allrequest = new sql.Request(dbConn);
-            allrequest.query('SELECT * FROM events;', function(err, result) {
-                var AllEventsCount = result.recordset.length;
-            })
             userId = loggedInUser.id;
             console.log('IN USEREVENTS');
             // run sql query to get all events created by the user logged in
@@ -95,11 +88,13 @@ module.exports = {
     details: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
+            request.query('SELECT *, users.firstName, users.lastName FROM events JOIN users on users.id = events.userId WHERE events.id = '+req.query.id+';', function(err, result) {
+                
                 model = result.recordset[0];
                 // CHECKING sql query
-                //console.log('IN DETAILS');
-                //console.log(model);
+                console.log(model.firstName)
+                console.log('IN DETAILS');
+                console.log(result);
                 res.render('events/details', {title: 'Event Details', model, loggedInUserId: loggedInUser.id});
             });
         });
