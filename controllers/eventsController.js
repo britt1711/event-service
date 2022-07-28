@@ -1,14 +1,11 @@
 /**
- * @module eventsController
+ * this controller deals with the methods required to display and manipulate data in the events table
  */
 
-const app = require("express");
+// import necessary external modulules
 const sql = require('mssql');
-const markdown = require('markdown').markdown;
 const config = require('../config/config.js');
 const { loggedInUser } = require("./AccountController.js");
-const bodyParser = require('body-parser');
-//const ejsLint = require('ejs-lint');
 
 // information to connect to the database
 const dbConfig = {
@@ -24,17 +21,46 @@ const dbConfig = {
     }
 };
 
+// function to get AllEventsCount to display
+//TODO: can't access this anywhere else... why?
+function getAllEventsCount() {
+    // instantiate new connection to database
+    const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
+        // instantiate new request
+        const request = new sql.Request(dbConn);
+        // run sql query to get all events to display to user
+        request.query('SELECT * FROM events;', function(err, result) {
+            console.log(result.recordset.length);
+            return result.recordset.length;
+        });
+    });
+}
+
+// TESTING
+var x = getAllEventsCount();
+console.log('printing all events count',x);
+
 module.exports = {
     // GET ALl Events
     // displays all events created to user
     index: function(req, res) {
+        // instantiate new connection to database
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
+            // instantiate new request
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events;', function(err, result) {
+            // run sql query to get all events to display to user
+            request.query('SELECT * FROM events;', function(err, result, x) {
                 model = result.recordset
-                console.log('IN INDEX');
-                console.log(model);
-                res.render('events/index', {title: 'Events', model});
+                // CHECKING query result
+                //console.log('IN INDEX');
+                //console.log(model);
+                //TODO: add functionality to display events in sorted orders
+
+                // render events index page to user
+                // create variables that holds how many events user is viewing
+                const DisplayedEventsCount = model.length;
+                const AllEventsCount = model.length;
+                res.render('events/index', {title: 'Events', model, DisplayedEventsCount, AllEventsCount});
             });
         });
     },
@@ -43,15 +69,17 @@ module.exports = {
     userEvents: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            // this wouldn't be hardcoded in reality
-            // would check the userid of the userloggedin
-            // is there an identity lib like in asp.net?
             userId = loggedInUser.id;
             console.log('IN USEREVENTS');
+            // run sql query to get all events created by the user logged in
             request.query('SELECT * FROM events WHERE userId='+userId+';', function(err, result) {
                 model = result.recordset
-                console.log(model);
-                res.render('events/userEvents', {title: 'My Events', model});
+                // CHECKING query result
+                //console.log('IN USER EVENTS')
+                //console.log(model);
+                // create variable that holds how many events user is viewing
+                const DisplayedEventsCount = model.length;
+                res.render('events/userEvents', {title: 'My Events', model, DisplayedEventsCount});
             });
         });
     },
@@ -60,24 +88,14 @@ module.exports = {
     details: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
-                console.log(result);
+            request.query('SELECT *, users.firstName, users.lastName FROM events JOIN users on users.id = events.userId WHERE events.id = '+req.query.id+';', function(err, result) {
+                
                 model = result.recordset[0];
+                // CHECKING sql query
+                console.log(model.firstName)
                 console.log('IN DETAILS');
-                console.log(model);
+                console.log(result);
                 res.render('events/details', {title: 'Event Details', model, loggedInUserId: loggedInUser.id});
-            /*
-            if(req.accepts('html')) {
-                for(var i = 0; i < recordset.length; i++){
-                    recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
-                }
-
-                res.render('events/details', {title: 'Event Details', model: recordset[0]});
-            }
-            else {
-                res.json(recordset[0]);
-            }
-            */
             });
         });
     },
@@ -87,9 +105,14 @@ module.exports = {
     edit: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
+            // query the information for the exact event user is wanting to edit
+            // will allow form to prepopulate with all current event information
+            console.log(req.query.id.split(','));
+            request.query('SELECT * FROM events WHERE id = '+req.query.id.split(',')[0]+';', function(err, result) {
                 let model = result.recordset[0];
                 console.log("IN EVENTSCONTROLLER EDIT");
+                console.log(result);
+                // CHECKING sql query
                 console.log(model);
                 res.render('events/edit', {title: 'Edit Event', model});
             });
@@ -120,9 +143,9 @@ module.exports = {
                 zipcode = \''+req.body.zipcode+'\', \
                 country = N\''+req.body.country+'\' WHERE id='+req.body.id+'', function(err) {
                     if (err) {
-                        res.render('events/error', {err});
+                        res.render('events/error', {title:"Success!", err});
                     } else  {
-                        res.render('events/success', {action: 'Event Updated!'})
+                        res.render('events/success', {title:"Success!", action: 'Event Updated!'})
                     }              
             });
         });
@@ -160,9 +183,9 @@ module.exports = {
             N\''+req.body.country+'\')', function(err) {
                 if (err) {
                     console.log(err)
-                    res.render('events/error', {err});
+                    res.render('events/error', {title:"Error!", err});
                 } else  {
-                    res.render('events/success', {action: 'Event Created!'});
+                    res.render('events/success', {title:"Success!", action: 'Event Created!'});
                 }              
             });
         });
@@ -178,9 +201,9 @@ module.exports = {
             request.query('DELETE FROM events WHERE id ='+req.query.id+';', function(err) {
                 if (err) {
                     console.log(err)
-                    res.render('events/error', {err});
+                    res.render('events/error', {title:"Error!", err});
                 } else  {
-                    res.render('events/success', {action: 'Event Deleted!'});
+                    res.render('events/success', {title:"Success!", action: 'Event Deleted!'});
                 }              
             });
         });

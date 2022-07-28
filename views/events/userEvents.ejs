@@ -2,64 +2,60 @@
     file shows index page of all available events to user
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
-<main class="container mt-5">
-    <block class="title-block">
-        <!-- title section -->
-        <h1><%= title %></h1>
-        <p>
-            See all your events below.
-        </p>
-        <hr>
-    </block>
-
-    <!--button to view details of event-->
-    <form action="/events/create" method="get">
-        <input type="submit" value="Create Event" class="btn btn-secondary mb-3"/>
-    </form>
-    <hr>
-
-    <!-- body section -->
-    <body>
-        <!--to access a property of the object in array, reference array index and property key-->
-        <!--iterate over the array and print all values using a forEach-->
-        <% for (let i = 0; i < model.length; i++) { %>
-            <% const e = model[i]%>
-            <div>
-                <h5><%= e.title %></h5>
-                <ul>
-                    <li>Description: <%= e.description %></li>
-                    <li>Venue Name: <%= e.venueName %></li>
-                    <li>Address: <%= e.street%>, <%= e.city%>, <%= e.state %> <%= e.zipcode %> <%= e.country%></li>
-                    <li>Start Date and Time: <%= e.startDatetime.toString() %></li>
-                    <li>End Date and Time: <%= e.endDatetime.toString() %></li>  
-                </ul>
-            </div>
-
-            <!--button to view details of event-->
-            <form action="/events/details" >
-                <input type="hidden" id="id" name="id" value=<%= e.id %> >
-                <input type="submit" value="View Event" class="btn btn-secondary mb-3"/>
-            </form>
+<body class="page-body">
+    <main class="container mt-5">
+        <block class="title-block">
+            <!-- title section -->
+            <h1><%= title %></h1>
+            <p>
+                See all your events below.
+            </p>
             <hr>
-        <% }; %>
+        </block>
+    
+        <!-- body section -->
+        <body>
+        
+            <!--button to view details of event-->
+            <form action="/events/create" method="get">
+                <input type="submit" value="Create New Event" class="btn btn-primary mb-3"/>
+            </form>
 
-    </body>
+            <!--displays count of events on page-->
+            <div>
+                <p style="text-align:right; font: size 80%;">
+                    Displaying <%= DisplayedEventsCount %> Events.
+                </p>
+                <hr>
+            </div>
+    
+            <!--to access a property of the object in array, reference array index and property key-->
+            <!--iterate over the array and print all values using a forEach-->
+            <% for (let i = 0; i < model.length; i++) { %>
+                <% const e = model[i]%>
+                <div>
+                    <h5><%= e.title %></h5>
+                    <ul>
+                        <li>Description: <%= e.description %></li>
+                        <li>Venue Name: <%= e.venueName %></li>
+                        <li>Address: <%= e.street%>, <%= e.city%>, <%= e.state %> <%= e.zipcode %> <%= e.country%></li>
+                        <li>Start Date and Time: <%= e.startDatetime.toString() %></li>
+                        <li>End Date and Time: <%= e.endDatetime.toString() %></li>  
+                    </ul>
+                </div>
+    
+                <!--button to view details of event-->
+                <form action="/events/details" >
+                    <input type="hidden" id="id" name="id" value=<%= e.id %> >
+                    <input type="submit" value="View Details" class="btn btn-secondary mb-3"/>
+                </form>
+                <hr>
+            <% }; %>
+    
+        </body>
+    </main>
+</bodu>
 
-</main>
 
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
 
-</html>
+<link rel="stylesheet" href="/public/css/boostrap/bootstrap.min.css">

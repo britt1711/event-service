@@ -2,17 +2,6 @@
     file will allow user to create an event
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
 <main class="container mt-5">
     <block class="title-block">
         <!-- title section -->
@@ -73,7 +62,7 @@
                 </th>
                 <tr>
                     <td width="100%">
-                        <input class="mb-2" name="eventTypeId" id="eventTypeId" placeholder="Choose Event Type of Event" style="width: 50%;box-sizing:border-box;"/>
+                        <input class="mb-2" name="eventTypeId" id="eventTypeId" placeholder="Choose type of event" style="width: 50%;box-sizing:border-box;"/>
                     </td>
                 </tr>
 
@@ -138,9 +127,3 @@
     </body>
 
 </main>
-
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
-
-</html>

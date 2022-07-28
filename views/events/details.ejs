@@ -2,17 +2,6 @@
     file shows details of a particular event to the user
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
 <main class="container mt-5">
     <block class="title-block">
         <!-- title section -->
@@ -29,15 +18,13 @@
         <!--iterate over the array and print all values using a forEach-->
         <% const e = model %>
         <div>
-            <h5><%= e.title %></h5>
-            <ul>
-                <li>Description: <%= e.description %></li>
-                <li>Venue Name: <%= e.venueName %></li>
-                <li>Address: <%= e.street%>, <%= e.city%>, <%= e.state %> <%= e.zipcode %> <%= e.country%></li>
-                <li>Start Date and Time: <%= e.startDatetime.toString() %></li>
-                <li>End Date and Time: <%= e.endDatetime.toString() %></li>  
-            </ul>
-        </div>
+            <h4><%= e.title %></h5>
+            <p><b>Description:</b> <%= e.description %></p>
+            <p><b>Venue Name:</b> <%= e.venueName %></p>
+            <p><b>Address:</b> <%= e.street%>, <%= e.city%>, <%= e.state %> <%= e.zipcode %> <%= e.country%></p>
+            <p><b>Start Date and Time:</b> <%= e.startDatetime.toString() %></p>
+            <p><b>End Date and Time:</b> <%= e.endDatetime.toString() %></p>  
+            <p><b>Created by:</b> <%= e.firstName[0] %> <%= e.lastName[0] %></p>
 
         <!--NEED TO WRAP BELOW CODE IN SECTION TO ENSURE user made event-->
         <!--right now this is hardcoded because user login feature is not coded
@@ -48,11 +35,11 @@
             <input type="hidden" id="id" name="id" value=<%= e.id %> >
             <input type="submit" value="Edit Event" class="btn btn-secondary mb-3"/>
         </form>
-        <hr>
+    </br>
 
         <!--button to delete event-->
         <form action="/events/delete" method="get" >
-            <input type="hidden" id="id" name="id" value=<%= e.id %> >
+            <input type="hidden" id="id" name="id" value=<%= e.id[0] %> >
             <input type="submit" value="Delete Event" class="btn btn-secondary mb-3"/>
         </form>
             
@@ -61,9 +48,3 @@
     </body>
 
 </main>
-
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
-
-</html>
