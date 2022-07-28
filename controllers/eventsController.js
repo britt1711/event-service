@@ -124,6 +124,7 @@ module.exports = {
             request.input('zipcode', req.params.zipcode);
             request.input('country', req.params.country);
 
+            
             request.query('UPDATE Recipes SET title = @title, \
                 description = @description, \
                 startDatetime = @startDate, \
@@ -146,46 +147,32 @@ module.exports = {
     },
 
     // CREATE an event
-    //NOT WORKING and i'm not sure why
     create: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            console.log("IN CREATE POST");
-            console.log(req.body.title);
-            colnames = '(userId, title, [description], startDatetime, endDatetime, eventTypeId, venueName, street, city, [state], zipcode, country)'
-
-            console.log('INSERT INTO events '+colnames+' VALUES \
+            colnames = '(userId, title, [description], startDatetime, endDatetime, eventTypeId, venueName, street, city, [state], zipcode, country)';
+            // change the datetime values to remove 'T'
+            let startdt = String(req.body.startDatetime).replace('T',' ');
+            let enddt = String(req.body.endDatetime).replace('T',' ');
+            // query to insert row into table
+            request.query('INSERT INTO events '+colnames+' VALUES (\
             '+loggedInUser.id+', \
             N\''+req.body.title+'\', \
             N\''+req.body.description+'\', \
-            '+req.body.startDatetime+'\', \
-            '+req.body.endDatetime+'\', \
-            '+req.body.eventTypeId+'\', \
+            \''+startdt+'\', \
+            \''+enddt+'\', \
+            '+req.body.eventTypeId+', \
             N\''+req.body.venueName+'\', \
             N\''+req.body.street+'\', \
             N\''+req.body.city+'\', \
             N\''+req.body.state+'\', \
             \''+req.body.zipcode+'\', \
-            N\''+req.body.country+'\')');
-
-            request.query('INSERT INTO dbo.events '+colnames+' VALUES \
-                '+loggedInUser.id+', \
-                '+req.body.title+', \
-                '+req.body.description+', \
-                '+req.body.startDatetime+', \
-                '+req.body.endDatetime+', \
-                '+req.body.eventTypeId+', \
-                '+req.body.venueName+', \
-                '+req.body.street+', \
-                '+req.body.city+', \
-                '+req.body.state+', \
-                '+req.body.zipcode+', \
-                '+req.body.country+')', function(err) {
+            N\''+req.body.country+'\')', function(err) {
                 if (err) {
                     console.log(err)
                     res.render('events/error', {err});
                 } else  {
-                    res.render('events/sucess', {action: 'Event Created!'});
+                    res.render('events/success', {action: 'Event Created!'});
                 }              
             });
         });
