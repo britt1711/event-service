@@ -20,14 +20,14 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // static rules
 app.use(express.static('public'));
 app.use('/css', express.static(__dirname + 'public/css'));
-app.set('view options', {layout: 'layout.ejs'});
 
 // set the templating view engine to ejs
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
+app.set('view options', {layout: '/layout.ejs'});
 
 // loads all html, css, and js files from the public folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 /** 
  *  navigation

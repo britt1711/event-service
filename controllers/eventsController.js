@@ -107,11 +107,13 @@ module.exports = {
             const request = new sql.Request(dbConn);
             // query the information for the exact event user is wanting to edit
             // will allow form to prepopulate with all current event information
-            request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
+            console.log(req.query.id.split(','));
+            request.query('SELECT * FROM events WHERE id = '+req.query.id.split(',')[0]+';', function(err, result) {
                 let model = result.recordset[0];
+                console.log("IN EVENTSCONTROLLER EDIT");
+                console.log(result);
                 // CHECKING sql query
-                //console.log("IN EVENTSCONTROLLER EDIT");
-                //console.log(model);
+                console.log(model);
                 res.render('events/edit', {title: 'Edit Event', model});
             });
         });
@@ -141,9 +143,9 @@ module.exports = {
                 zipcode = \''+req.body.zipcode+'\', \
                 country = N\''+req.body.country+'\' WHERE id='+req.body.id+'', function(err) {
                     if (err) {
-                        res.render('events/error', {err});
+                        res.render('events/error', {title:"Success!", err});
                     } else  {
-                        res.render('events/success', {action: 'Event Updated!'})
+                        res.render('events/success', {title:"Success!", action: 'Event Updated!'})
                     }              
             });
         });
@@ -181,9 +183,9 @@ module.exports = {
             N\''+req.body.country+'\')', function(err) {
                 if (err) {
                     console.log(err)
-                    res.render('events/error', {err});
+                    res.render('events/error', {title:"Error!", err});
                 } else  {
-                    res.render('events/success', {action: 'Event Created!'});
+                    res.render('events/success', {title:"Success!", action: 'Event Created!'});
                 }              
             });
         });
