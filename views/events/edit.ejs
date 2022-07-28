@@ -1,0 +1,149 @@
+<!--
+    file will allow user to create an event
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs'); %>
+</head>
+
+<header>
+    <%- include('../partials/header.ejs'); %>
+</header>
+
+<main class="container mt-5">
+    <block class="title-block">
+        <!-- title section -->
+        <h1><%= title %></h1>
+        <p>
+            Edit your event below.
+        </p>
+        <hr>
+    </block>
+
+    <p> <%= model.startDatetime %> </p>
+
+    <!-- body section -->
+    <body>
+        <form method="post" action="/events/edit">
+            <table style="width: 100%">
+                <!--NOTE: there should be more value checks on all the features, 
+                but I'm going to assume user entered correctly due to time constraints of project-->
+                <!--NOTE: assigning userId to the person loggedIn, so this occurs on the controller automatically-->
+                <th class="mt-2">
+                    <h6>Event Title</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="title" id="title" type="text" placeholder="Enter title of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.title %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>Description</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="description" id="description" type="text" placeholder="Enter description of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.description %>" />
+                    </td>
+                </tr>
+
+                <!--gets start date and end date in local time-->
+                <th class="mt-2">
+                    <h6>Start Date and Time</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="startDatetime" id="startDatetime" type="datetime-local" style="width: 50%;box-sizing:border-box;" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>End Date and Time</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="endDatetime" id="endDatetime" type="datetime-local" style="width: 50%;box-sizing:border-box;"  />
+                    </td>
+                </tr>
+
+                <!--this should be a drop down option-->
+                <th class="mt-2">
+                    <h6>Event Type</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="eventTypeId" id="eventTypeId" placeholder="Choose Event Type of Event" style="width: 50%;box-sizing:border-box;" value="<%= model.eventTypeId %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>Venue Name</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="venueName" id="venueName" type="text" placeholder="Enter the Venue Name of Event" style="width: 50%;box-sizing:border-box;" value="<%= model.venueName %>" />
+                    </td>
+                </tr>
+
+                <!--in reality, city, state, and country should all be dropdowns-->
+                <th class="mt-2">
+                    <h6>Street Address</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="street" id="street" type="text" placeholder="Enter street address of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.street %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>City</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="city" id="city" type="text" placeholder="Enter city of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.city %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>State</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="state" id="state" type="text" min="2" max="2" placeholder="Enter state of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.state %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>Zipcode</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="zipcode" id="zipcode" type="text" min="5" max="5" placeholder="Enter zipcode of your event" style="width: 50%;box-sizing:border-box;" value="<%= model.zipcode %>" />
+                    </td>
+                </tr>
+
+                <th class="mt-2">
+                    <h6>Country</h6>
+                </th>
+                <tr>
+                    <td width="100%">
+                        <input class="mb-2" name="country" id="country" type="text" style="width: 50%;box-sizing:border-box;" placeholder="Enter country of your event" value="<%= model.country %>" />
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="id" name="id" value= <%= model.id %> /> 
+            <input type="submit" value="Update Event" class="btn btn-primary mt-3"/>
+        </form>
+
+    </body>
+
+</main>
+
+<footer>
+    <%- include('../partials/footer.ejs'); %>
+</footer>
+
+</html>

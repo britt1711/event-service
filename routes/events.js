@@ -25,8 +25,14 @@ module.exports.edit = function(req, res) {
 }
 
 // UPDATE specific event
+// POST edit
 module.exports.update = function(req, res) {
     eventsController.update(req, res);
+}
+
+// GET form to create an event
+module.exports.getCreate = function(req, res) {
+    eventsController.getCreate(req, res);
 }
 
 // POST form to create an event

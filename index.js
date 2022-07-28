@@ -12,6 +12,9 @@ const bodyParser = require('body-parser');
 const home = require('./routes/home');
 const events = require('./routes/events');
 
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
@@ -21,21 +24,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 // pages from home controller
 app.get('/', home.index);
 
-// pages relating to events controller
+/** 
+ *  routes relating to events table
+ */
+
+// shows all events
 app.get('/events', events.index);
+
+// shows only user events
 app.get('/events/userEvents', events.userEvents);
+
+// shows only one event
 app.get('/events/details/:id?', events.details);
-app.get('events/edit', events.edit);
-app.post('/events/:userId/:id', events.update);
-app.get('/events/create', (req, res) => {
-    res.render('events/create', {title: 'Create an Event'})
-});
 
-app.get('/events/delete/:id?', events.delete);
+// allows for edit and update of event
+app.get('/events/edit/:id?', events.edit);
+app.post('/events/edit', urlencodedParser, events.update);
 
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+// allows for creation of an event
+app.get('/events/create', events.getCreate);
 app.post('/events/create', urlencodedParser, events.create);
+
+// allows user to delete an event
+app.get('/events/delete/:id?', events.delete);
 
 // check sql connection
 const dbConfig = {

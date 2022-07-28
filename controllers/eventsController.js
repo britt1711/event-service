@@ -62,7 +62,7 @@ module.exports = {
             const request = new sql.Request(dbConn);
             request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
                 console.log(result);
-                model = result.recordset;
+                model = result.recordset[0];
                 console.log('IN DETAILS');
                 console.log(model);
                 res.render('events/details', {title: 'Event Details', model, loggedInUserId: loggedInUser.id});
@@ -88,64 +88,54 @@ module.exports = {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
             request.query('SELECT * FROM events WHERE id = '+req.query.id+';', function(err, result) {
-                model = result.recordsets;
+                let model = result.recordset[0];
+                console.log("IN EVENTSCONTROLLER EDIT");
                 console.log(model);
                 res.render('events/edit', {title: 'Edit Event', model});
-            /*
-            if(req.accepts('html')) {
-                for(var i = 0; i < recordset.length; i++){
-                    recordset[i].descriptionAsHTML = markdown.toHTML(recordset[i].description, 'Maruku');
-                }
-
-                res.render('events/details', {title: 'Event Details', model: recordset[0]});
-            }
-            else {
-                res.json(recordset[0]);
-            }
-            */
             });
         });
     },
 
+    // POST edit
     // UPDATE Single Event
     update: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
             const request = new sql.Request(dbConn);
-            
-            request.input('title', req.body.title);
-            request.input('description', req.body.description);
-            request.input('startDatetime', req.params.startDatetime);
-            request.input('endDatetime', req.body.endDatetime);
-            request.input('eventTypeId', req.body.eventTypeId);
-            request.input('venueName', req.body.venueName);
-            request.input('street', req.params.street);
-            request.input('city', req.body.city);
-            request.input('state', req.body.state);
-            request.input('zipcode', req.params.zipcode);
-            request.input('country', req.params.country);
-
-            
-            request.query('UPDATE Recipes SET title = @title, \
-                description = @description, \
-                startDatetime = @startDate, \
-                endDatetime = @endDate, \
-                eventTypeId = @eventTypeId, \
-                venueName = @venueName, \
-                street = @street, \
-                city = @city, \
-                state = @state, \
-                zipcode = @zipcode, \
-                country = @country, \
-                WHERE id = @id;', function(err) {
-                if (err) {
-                    res.render('events/error', {err});
-                } else  {
-                    res.render('events/sucess', {action: 'Event Updated!'})
-                }              
+            // change the datetime values to remove 'T'
+            let startdt = String(req.body.startDatetime).replace('T',' ');
+            let enddt = String(req.body.endDatetime).replace('T',' ');
+            console.log(req.body.id)
+            // query to insert row into table
+            request.query('UPDATE events SET \
+                userId ='+loggedInUser.id+', \
+                title = N\''+req.body.title+'\', \
+                description = N\''+req.body.description+'\', \
+                startDatetime = \''+startdt+'\', \
+                endDatetime = \''+enddt+'\', \
+                eventTypeId = '+req.body.eventTypeId+', \
+                venueName = N\''+req.body.venueName+'\', \
+                street = N\''+req.body.street+'\', \
+                city = N\''+req.body.city+'\', \
+                state = N\''+req.body.state+'\', \
+                zipcode = \''+req.body.zipcode+'\', \
+                country = N\''+req.body.country+'\' WHERE id='+req.body.id+'', function(err) {
+                    if (err) {
+                        res.render('events/error', {err});
+                    } else  {
+                        res.render('events/success', {action: 'Event Updated!'})
+                    }              
             });
         });
     },
 
+    // GET create
+    // CREATE form for an event
+    getCreate: function (req, res) {
+        // send user to the form
+        res.render('events/create', {title: 'Create an Event'})
+    },
+
+    // POST create
     // CREATE an event
     create: function(req, res) {
         const dbConn = new sql.ConnectionPool(dbConfig, function(err) {
