@@ -2,29 +2,23 @@
     file shows index page of all available events to user
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
 <main class="container mt-5">
     <block class="title-block">
         <!-- title section -->
         <h1><%= title %></h1>
         <p>
-            See all events on Eventeny below.
+            Check out what's going on in the Eventeny community!
         </p>
-        <hr>
     </block>
 
     <!-- body section -->
     <body>
+        <div>
+            <p style="text-align:right; font: size 80%;">
+                Displaying <%= DisplayedEventsCount %> of <%= AllEventsCount %> Events.
+            </p>
+            <hr>
+        </div>
         <!--would be most ideal to have a search bar that could filter events and sort search-->
         
         <!--to access a property of the object in array, reference array index and property key-->
@@ -42,7 +36,7 @@
                 </ul>
             </div>
 
-            <!--button to view details of event-->
+            <!--button to view details of each event-->
             <form action="/events/details" >
                 <input type="hidden" id="id" name="id" value=<%= e.id %> >
                 <input type="submit" value="View Event" class="btn btn-secondary mb-3"/>
@@ -51,11 +45,4 @@
         <% }; %>
 
     </body>
-
 </main>
-
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
-
-</html>

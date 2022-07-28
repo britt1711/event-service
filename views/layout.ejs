@@ -1,0 +1,30 @@
+<!--
+    file contains base layout for views
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head.ejs'); %>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <%- include('./partials/header.ejs'); %>
+        </header>
+        <main>
+            <!--content from each individual view-->
+            <%- body %>
+        </main>
+        <footer>
+            <%- include('./partials/footer.ejs'); %>
+        </footer>        
+    </div>
+
+    
+</body>
+
+
+</html>

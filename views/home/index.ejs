@@ -4,40 +4,23 @@
 
 <!-- TODO: button doesn't lead to the right place; error in controller?-->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
 <main class = "container mt-5">
-    <div class="jumbotron">
+    <div class="welcomeMessage">
         <h1>Welcome Back to Eventeny!</h1>
         <h6>Easily manage everything that goes into your in-person, hybrid, and online events all in one convenient place!
         </h6>
-
+    </div>
+    <div>
         <p class="mt-5">Click below to view our events.</p>
         <form method="get" action="/events">
-            <input type="submit" value="Events" class="btn btn-secondary mb-3" />
+            <input type="submit" value="View Events" class="btn btn-secondary mb-3" />
         </form>
 
         <!-- TODO: define userId -->
         <p class="mt-3">Click below to manage your events.</p>
         <form method="get" action="/events/userEvents/">
-            <!--right now, user ID is hardcoded-->
-            <!--<input type="hidden" id="userId" value = 1 >-->
+            <!--right now, user ID is hardcoded; otherwise on controller end, use Identity to get current user-->
             <input type="submit" value="View Your Events" class="btn btn-secondary mb-3" />
         </form>
     </div>
 </main>
-
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
-
-</html>

@@ -1,7 +1,7 @@
-/*
-this controller deals with the methods required to login
-
-since that is beyond the scope of this project, I am going to manually assign a user login
+/**
+ * this controller deals with the methods required to login and manipulate user data
+ * 
+ * since that is beyond the scope of this project, I am going to manually assign a user login
 */
 
 module.exports.loggedInUser = {

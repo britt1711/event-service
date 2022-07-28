@@ -2,17 +2,6 @@
     file shows index page of all available events to user
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%- include('../partials/head.ejs'); %>
-</head>
-
-<header>
-    <%- include('../partials/header.ejs'); %>
-</header>
-
 <main class="container mt-5">
     <block class="title-block">
         <!-- title section -->
@@ -22,6 +11,13 @@
         </p>
         <hr>
     </block>
+
+    <div>
+        <p style="text-align:right; font: size 80%;">
+            Displaying <%= DisplayedEventsCount %> Events.
+        </p>
+        <hr>
+    </div>
 
     <!--button to view details of event-->
     <form action="/events/create" method="get">
@@ -55,11 +51,4 @@
         <% }; %>
 
     </body>
-
 </main>
-
-<footer>
-    <%- include('../partials/footer.ejs'); %>
-</footer>
-
-</html>
